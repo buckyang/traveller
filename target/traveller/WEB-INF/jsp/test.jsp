@@ -1,1 +1,0 @@
-Hello <c:out value="${account.email}"/>
