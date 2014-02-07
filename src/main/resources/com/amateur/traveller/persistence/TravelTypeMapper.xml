@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.amateur.traveller.persistence.TravelTypeMapper">
+
+  	<cache />
+
+	<insert id="insertTravelType" parameterType="TravelType">
+		insert into travel_type (
+			 type_name, sort_order
+		)values (
+			#{typeName}, #{sortOrder}
+		)
+	</insert>
+	<select id="selectTravelTypes" resultType="TravelType">
+		select * from travel_type
+			order by sort_order asc
+	</select>				
+</mapper>

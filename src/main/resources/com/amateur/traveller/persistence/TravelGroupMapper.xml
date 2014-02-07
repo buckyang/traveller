@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.amateur.traveller.persistence.TravelGroupMapper">
+
+  	<cache />
+
+	<insert id="insertTravelGroup" parameterType="TravelGroup">
+		insert into travel_group (
+			travel_group_id, from_city, from_resort, from_address, 
+			arrival_city, arrival_resort, from_date, count, 
+			days, budget, topic, note, 
+			type, initiator, disable
+		)values (
+			#{travelGroupId}, #{fromCity}, #{fromResort}, #{fromAddress}, 
+			#{arrivalCity}, #{arrivalResort}, #{fromDate}, #{count}, 
+			#{days}, #{budget}, #{topic}, #{note}, 
+			#{type}, #{initiator}, #{disable}	
+		)
+	</insert>
+	<insert id="insertScheduleNote" parameterType="ScheduleNote">
+		insert into schedule_note (
+			schedule_note_id, day_number, note, travel_group_id
+		)values (
+			#{scheduleNoteId},  #{dayNumber},  #{note},  #{travelGroupId}	
+		)
+	</insert>
+	<insert id="insertTravelGroupRemark" parameterType="TravelGroupRemark">
+		insert into travel_group_remark (
+			group_remark_id, remark, date, travel_group_id, from_account_id, to_account_id
+		)values (
+			#{groupRemarkId}, #{remark}, #{date}, #{travelGroupId}, #{fromAccountId}, #{toAccountId}
+		)
+	</insert>	
+	<insert id="insertTravelGroupAccount" parameterType="TravelGroupAccount">
+		insert into account_travel_group (
+			id, travel_group_id, account_id, date
+		)values (
+			#{id}, #{travelGroupId}, #{accountId}, #{date}
+		)
+	</insert>				
+	<select id="selectTravelGroupById" parameterType="int" resultMap="travelGroupMap">
+		select 
+			t.travel_group_id,
+			t.from_city,
+			t.from_resort,
+			t.from_address,
+			t.arrival_city,
+			t.arrival_resort,
+			t.from_date,
+			t.count,
+			t.days,
+			t.budget,
+			t.topic,
+			t.note,
+			t.type,
+			t.initiator,
+			t.disable,
+			s.schedule_note_id,
+			s.day_number,
+			s.note as scheduleNote
+		from travel_group t left outer join schedule_note s on t.travel_group_id = s.travel_group_id having t.travel_group_id=#{id}
+	</select>
+	<resultMap id="travelGroupMap" type="TravelGroup">
+		<id property="travelGroupId" column="travel_group_id" />
+		<result property="fromCity" column="from_city" />
+		<result property="fromResort" column="from_resort" />
+		<result property="fromAddress" column="from_address" />
+		<result property="arrivalCity" column="arrival_city" />
+		<result property="arrivalResort" column="arrival_resort" />
+		<result property="fromDate" column="from_date" />
+		<result property="count" column="count" />
+		<result property="days" column="days" />
+		<result property="budget" column="budget" />
+		<result property="topic" column="topic" />
+		<result property="note" column="note" />
+		<result property="type" column="type" />
+		<result property="initiator" column="initiator" />
+		<result property="disable" column="disable" />
+		<collection property="scheduleNotes" ofType="ScheduleNote" resultMap="scheduleNoteMap"/>
+		<collection property="travelGroupRemarks" column="travel_group_id" ofType="TravelGroupRemark" select="selectRemarksForTravelGroup"/>	
+		<collection property="travelGroupAccounts" column="travel_group_id" ofType="TravelGroupAccount" select="selectAccountsForTravelGroup"/>			
+	</resultMap>
+	<resultMap id="scheduleNoteMap" type="ScheduleNote">
+		<id property="scheduleNoteId" column="schedule_note_id" />
+		<result property="dayNumber" column="day_number" />
+		<result property="note" column="scheduleNote" />
+	</resultMap>
+	
+	<select id="selectRemarksForTravelGroup" parameterType="int" resultType="TravelGroupRemark">
+		select
+			r.group_remark_id, 
+			r.remark, 
+			r.date, 
+			r.travel_group_id, 
+			r.from_account_id, 
+			a.nickname
+		from travel_group_remark r join account a on r.from_account_id = a.account_id having r.travel_group_id = #{id}
+	</select>
+	<select id="selectAccountsForTravelGroup" parameterType="int" resultType="TravelGroupAccount">
+		select
+			ta.id,
+			ta.travel_group_id,
+			ta.account_id,
+			ta.date, 
+			a.nickname
+		from account_travel_group ta join account a on ta.account_id = a.account_id having ta.travel_group_id = #{id}
+	</select>
+	
+	<select id="searchTravelGroups" parameterType="hashmap" resultMap="searchTravelGroupMap">
+		select 
+			t.travel_group_id,
+			t.from_city,
+			t.from_resort,
+			t.from_address,
+			t.arrival_city,
+			t.arrival_resort,
+			t.from_date,
+			t.count,
+			t.days,
+			t.budget,
+			t.topic,
+			t.note,
+			t.type,
+			t.initiator,
+			t.disable,
+			s.schedule_note_id,
+			s.day_number,
+			s.note as scheduleNote
+		from travel_group t left outer join schedule_note s on t.travel_group_id = s.travel_group_id having ${queryString}
+	</select>
+	<resultMap id="searchTravelGroupMap" type="TravelGroup">
+		<id property="travelGroupId" column="travel_group_id" />
+		<result property="fromCity" column="from_city" />
+		<result property="fromResort" column="from_resort" />
+		<result property="fromAddress" column="from_address" />
+		<result property="arrivalCity" column="arrival_city" />
+		<result property="arrivalResort" column="arrival_resort" />
+		<result property="fromDate" column="from_date" />
+		<result property="count" column="count" />
+		<result property="days" column="days" />
+		<result property="budget" column="budget" />
+		<result property="topic" column="topic" />
+		<result property="note" column="note" />
+		<result property="type" column="type" />
+		<result property="initiator" column="initiator" />
+		<result property="disable" column="disable" />
+		<collection property="scheduleNotes" ofType="ScheduleNote" resultMap="scheduleNoteMap"/>
+		<collection property="travelGroupAccounts" column="travel_group_id" ofType="TravelGroupAccount" select="selectAccountsForTravelGroup"/>			
+	</resultMap>			
+	<update id="disableTravelGroup" parameterType="TravelGroup">
+		update travel_group set 
+			disable = #{disable}
+		where travel_group_id = #{travelGroupId} and initiator = #{initiator}
+	</update>		
+
+</mapper>
