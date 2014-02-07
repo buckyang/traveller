@@ -37,7 +37,8 @@ public class Account implements Serializable {
 	private String imageUrl;
 	
 	private String nickname;
-
+	
+	private String idNumber;
 
 	public int getAccountId() {
 		return accountId;
@@ -125,5 +126,13 @@ public class Account implements Serializable {
 
 	public void setNickname(String nickName) {
 		this.nickname = nickName;
+	}
+
+	public String getIdNumber() {
+		return idNumber;
+	}
+
+	public void setIdNumber(String idNumber) {
+		this.idNumber = idNumber;
 	}
 }

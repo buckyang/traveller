@@ -4,7 +4,7 @@
 
 <mapper namespace="com.amateur.traveller.persistence.AccountMapper">
 
-  <cache />
+  	<cache />
 
     <select id="getUserByEmail" parameterType="string" resultType="Account">
 	    SELECT
@@ -23,8 +23,43 @@
 	    FROM account
 	    WHERE account.email=#{email}
     </select>
+    <select id="getAccountById" parameterType="int" resultType="Account">
+	    SELECT
+			account.account_id,
+			account.nickname,
+			account.pass,
+			account.real_name,
+			account.email,
+			account.idiograph,
+			account.sex,
+			account.id_number,
+			account.phone,
+			account.province,
+			account.city,
+			account.image_url
+	    FROM account
+	    WHERE account.account_id=#{accountId}
+    </select>    
 	<insert id="registerUser" parameterType="Account">
 		insert into account (nickname, email, pass, sex)
 		values (#{nickname}, #{email}, #{pass}, #{sex})
 	</insert>
+	<update id="updateUser" parameterType="Account">
+		update account set 
+			nickname = #{nickname},
+			real_name = #{realName},
+			idiograph = #{idiograph},
+			sex = #{sex},
+			id_number = #{idNumber},
+			phone = #{phone},
+			province = #{province},
+			city = #{city},
+			image_url = #{imageUrl}
+		where email = #{email}
+	</update>
+	<update id="updatePassword" parameterType="Account">
+		update account set 
+			pass = #{pass}
+		where account_id = #{accountId}
+	</update>	
 </mapper>

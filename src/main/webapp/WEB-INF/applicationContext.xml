@@ -15,19 +15,22 @@
      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
      http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-       <property name="driverClassName" value="com.mysql.jdbc.Driver" />  
-       <property name="url" value="jdbc:mysql://localhost:3306/traveller" />  
-       <property name="username" value="root" />  
-       <property name="password" value ="123456" /> 
-    </bean>
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" >
+	   <property name="driverClassName" value="com.mysql.jdbc.Driver" />  
+	   <property name="url" value="jdbc:mysql://localhost:3306/traveller" />  
+	   <property name="username" value="root" />  
+	   <property name="password" value ="123456" />    
+	   <property name="removeAbandoned" value="true"/>
+	   <property name="initialSize" value="5" />
+	   <property name="maxActive" value="10" />
+	</bean>
 
     <!-- transaction manager, use JtaTransactionManager for global tx -->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource" />
     </bean>
 
-    <context:component-scan base-package="com.amateur.traveller.service,com.amateur.traveller.controller,com.amateur.traveller.validator" /> 
+    <context:component-scan base-package="com.amateur.traveller.travelgroup,com.amateur.traveller.service,com.amateur.traveller.account,com.amateur.admin" /> 
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
 			<value>/WEB-INF/jsp/</value>
@@ -47,7 +50,7 @@
     <!-- enable autowire -->
     <context:annotation-config />
 	<mvc:annotation-driven />
-
+	
     <!-- define the SqlSessionFactory -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
@@ -59,4 +62,26 @@
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.amateur.traveller.persistence" />
     </bean>
+
+	<bean id="sequenceService" class="com.amateur.traveller.service.SequenceService">
+		<property name="travelGroup" value="travelGroup"/>
+		<property name="scheduleNote" value="scheduleNote"/>
+		<property name="travelType" value="travelType"/>
+		<property name="tripRemark" value="tripRemark"/>
+		<property name="tripAccount" value="tripAccount"/>
+		<property name="sequenceInitMap">
+			<map>
+				<entry key="travelGroup" value=";10000; " />
+				<entry key="scheduleNote" value=";1000; " />
+				<entry key="travelType" value=";1; " />
+				<entry key="tripRemark" value=";1; " />
+				<entry key="tripAccount" value=";1; " />
+			</map>
+		</property>
+	</bean> 
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+		<property name="interceptors" ref="userAuthorizationInteceptor"/>
+	</bean>
+	<bean id="userAuthorizationInteceptor" class="com.amateur.traveller.interceptor.UserAuthorizationInteceptor">
+	</bean>	   
 </beans>

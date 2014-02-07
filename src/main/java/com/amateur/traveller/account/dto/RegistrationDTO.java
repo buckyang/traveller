@@ -1,8 +1,8 @@
-package com.amateur.traveller.dto;
+package com.amateur.traveller.account.dto;
 
 /**
  * @author Lenovo
- *
+ * 
  */
 public class RegistrationDTO {
 	private String email;
@@ -12,7 +12,7 @@ public class RegistrationDTO {
 	private String rePassword;
 
 	private String nickname;
-	
+
 	private int gender;
 
 	public String getEmail() {

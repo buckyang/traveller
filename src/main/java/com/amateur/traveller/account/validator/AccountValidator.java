@@ -1,4 +1,4 @@
-package com.amateur.traveller.validator;
+package com.amateur.traveller.account.validator;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.amateur.traveller.dto.RegistrationDTO;
+import com.amateur.traveller.account.dto.RegistrationDTO;
 import com.amateur.traveller.persistence.AccountMapper;
 
 @Service
