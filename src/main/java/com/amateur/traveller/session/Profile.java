@@ -3,6 +3,7 @@ package com.amateur.traveller.session;
 import com.amateur.traveller.domain.Account;
 
 public class Profile {
+	public static final String PROFILE_KEY = "profile";
 	public static final int ANONYMOUS = 0;
 	public static final int EXPLICIT_LOGIN = 1;
 	public static final int COOKIE_LOGIN = 2;

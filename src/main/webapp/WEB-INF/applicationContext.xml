@@ -31,7 +31,42 @@
     </bean>
 
     <context:component-scan base-package="com.amateur.traveller.travelgroup,com.amateur.traveller.service,com.amateur.traveller.account,com.amateur.admin" /> 
+
+	<mvc:interceptors>
+		<bean class="com.amateur.traveller.interceptor.ProfileInitializerInterceptor" />
+		<mvc:interceptor>
+			<mvc:mapping path="/account/**"/>
+			<mvc:mapping path="/travelgroup/newtrip*"/>
+			<bean class="com.amateur.traveller.interceptor.UserAuthorizationInteceptor">
+				<property name="accountAccessDenyURL" value="/account/login.html"/>
+				<property name="ingorePaths">
+					<array>
+						<value>/account/login.html</value>
+						<value>/account/signon.html</value>
+					</array>
+				</property>
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>    
+	
+	 
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		  <property name="order" value="1" />
+		  <property name="mediaTypes">
+			<map>
+			   <entry key="json" value="application/json" />
+			   <entry key="html" value="application/html" />
+			   <entry key="jsp" value="application/html" />
+			</map>
+		  </property>
+		  <property name="defaultViews">
+			<list>
+			  <bean	class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"/>
+			</list>
+		  </property>
+	</bean>    
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="order" value="2" />
 		<property name="prefix">
 			<value>/WEB-INF/jsp/</value>
 		</property>
@@ -39,7 +74,8 @@
 			<value>.jsp</value>
 		</property>
 	</bean>
-
+	<mvc:view-controller path="/index.html" view-name="index"/>
+	<mvc:view-controller path="/" view-name="index"/>
 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basename">
 			<value>classpath:/messages</value>

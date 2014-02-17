@@ -6,7 +6,7 @@
 		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 		<meta http-equiv="Content-Language" content="en-us" />	
 		<decorator:head />
-		<title><decorator:title default="NGP CCC"/></title>
+		<title><decorator:title default="旅游拼团"/></title>
 	</head>
     <body>
 		<decorator:body />

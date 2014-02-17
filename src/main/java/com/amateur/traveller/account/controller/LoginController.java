@@ -45,17 +45,16 @@ public class LoginController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public void login(@Valid @ModelAttribute("loginDTO") LoginDTO loginDTO,
-			BindingResult result, Model m) {
+			BindingResult result,@ModelAttribute("profile")Profile profile, Model m) {
 		if (!result.hasErrors()) {
 		
 			Account account = accountService.getUserByEmail(loginDTO.getEmail());
 			if(account != null){
-				Profile profile = new Profile();
 				profile.setAccountDatasource(account);
 				profile.setStatus(Profile.EXPLICIT_LOGIN);
 				m.addAttribute("profile", profile);
 			}
-			m.addAttribute("message", "登陆成功");
+			m.addAttribute("message", "account.login.success");
 		}
 	}
 }

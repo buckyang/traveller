@@ -45,10 +45,9 @@ public class AccountController {
 
 	@RequestMapping(value = "/signon", method = RequestMethod.POST)
 	public void registerUser(@Valid @ModelAttribute("registrationDTO") RegistrationDTO registrationDTO,
-			BindingResult result, Model m) {
+			BindingResult result, @ModelAttribute("profile")Profile profile, Model m) {
 		if (!result.hasErrors()) {
 			if(accountService.registerUser(registrationDTO)){
-				Profile profile = new Profile();
 				profile.setAccountDatasource(accountService.getUserByEmail(registrationDTO.getEmail()));
 				profile.setStatus(Profile.EXPLICIT_LOGIN);
 			}

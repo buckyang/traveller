@@ -6,7 +6,7 @@
 		<form:form id="form" method="post" modelAttribute="loginDTO">
 			<div class="header">
 		  		<c:if test="${not empty message}">
-					<div id="message" class="success">${message}</div>	
+					<div id="message" class="success"><s:message code="${message}"/></div>	
 		  		</c:if>
 				<form:errors cssClass="error" />
 			</div>
