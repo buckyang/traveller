@@ -31,28 +31,29 @@ public class AccountController {
 	protected void initBinder(WebDataBinder binder) {
 		binder.setValidator(accountValidator);
 	}
-	
-	
+
 	@ModelAttribute("registrationDTO")
 	public RegistrationDTO createFormBeanRegistrationDTO() {
 		return new RegistrationDTO();
 	}
-	
-	
+
 	@RequestMapping(value = "/signon", method = RequestMethod.GET)
 	public void registerUser() {
 	}
 
 	@RequestMapping(value = "/signon", method = RequestMethod.POST)
-	public void registerUser(@Valid @ModelAttribute("registrationDTO") RegistrationDTO registrationDTO,
-			BindingResult result, @ModelAttribute("profile")Profile profile, Model m) {
+	public void registerUser(
+			@Valid @ModelAttribute("registrationDTO") RegistrationDTO registrationDTO,
+			BindingResult result, @ModelAttribute("profile") Profile profile,
+			Model m) {
 		if (!result.hasErrors()) {
-			if(accountService.registerUser(registrationDTO)){
-				profile.setAccountDatasource(accountService.getUserByEmail(registrationDTO.getEmail()));
+			if (accountService.registerUser(registrationDTO)) {
+				profile.setAccountDatasource(accountService
+						.getUserByEmail(registrationDTO.getEmail()));
 				profile.setStatus(Profile.EXPLICIT_LOGIN);
 			}
 			m.addAttribute("message", "account.registration.success");
 		}
 	}
-	
+
 }
