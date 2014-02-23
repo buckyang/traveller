@@ -40,6 +40,40 @@
 	    FROM account
 	    WHERE account.account_id=#{accountId}
     </select>    
+     <select id="getFollowerList" parameterType="int" resultType="Account">
+	    SELECT
+			account.account_id,
+			account.nickname,
+			account.pass,
+			account.real_name,
+			account.email,
+			account.idiograph,
+			account.sex,
+			account.id_number,
+			account.phone,
+			account.province,
+			account.city,
+			account.image_url
+	    FROM account
+	    WHERE account.account_id IN (SELECT follow_ship.follower_id from follow_ship WHERE follow_ship.followee_id=#{accountId});
+    </select>    
+     <select id="getFolloweeList" parameterType="int" resultType="Account">
+	    SELECT
+			account.account_id,
+			account.nickname,
+			account.pass,
+			account.real_name,
+			account.email,
+			account.idiograph,
+			account.sex,
+			account.id_number,
+			account.phone,
+			account.province,
+			account.city,
+			account.image_url
+	    FROM account
+	    WHERE account.account_id IN (SELECT follow_ship.followee_id from follow_ship WHERE follow_ship.follower_id=#{accountId});
+    </select>    
 	<insert id="registerUser" parameterType="Account">
 		insert into account (nickname, email, pass, sex)
 		values (#{nickname}, #{email}, #{pass}, #{sex})

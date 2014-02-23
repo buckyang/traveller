@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.amateur.traveller.persistence.JournalMapper">
+
+  	<cache />
+
+    <select id="getFavoriteJournal" parameterType="int" resultType="FavoriteJournal">
+	    SELECT
+			favorite_journal.journal_id,
+			favorite_journal.title,
+			favorite_journal.image_url,
+			favorite_journal.account_id
+	    FROM favorite_journal
+	    WHERE favorite_journal.account_id=#{id}
+    </select>
+</mapper>

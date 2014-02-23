@@ -19,7 +19,7 @@
 	   <property name="driverClassName" value="com.mysql.jdbc.Driver" />  
 	   <property name="url" value="jdbc:mysql://localhost:3306/traveller" />  
 	   <property name="username" value="root" />  
-	   <property name="password" value ="123456" />    
+	   <property name="password" value ="root" />    
 	   <property name="removeAbandoned" value="true"/>
 	   <property name="initialSize" value="5" />
 	   <property name="maxActive" value="10" />
@@ -30,12 +30,12 @@
         <property name="dataSource" ref="dataSource" />
     </bean>
 
-    <context:component-scan base-package="com.amateur.traveller.travelgroup,com.amateur.traveller.service,com.amateur.traveller.account,com.amateur.admin" /> 
+    <context:component-scan base-package="com.amateur.traveller.travelgroup,com.amateur.traveller.service,com.amateur.traveller.account,com.amateur.admin,com.amateur.traveller.journal.service,com.amateur.traveller.followship" /> 
 
 	<mvc:interceptors>
 		<bean class="com.amateur.traveller.interceptor.ProfileInitializerInterceptor" />
 		<mvc:interceptor>
-			<mvc:mapping path="/account/**"/>
+			<!-- <mvc:mapping path="/account/**"/> -->
 			<mvc:mapping path="/travelgroup/newtrip*"/>
 			<bean class="com.amateur.traveller.interceptor.UserAuthorizationInteceptor">
 				<property name="accountAccessDenyURL" value="/account/login.html"/>
