@@ -7,6 +7,6 @@
 		<pattern>*/css/*</pattern>
 	</excludes>
 	<decorator name="main" page="main.jsp">
-		<pattern>/*</pattern>
+		<pattern>*.jsp</pattern>
 	</decorator>
 </decorators>

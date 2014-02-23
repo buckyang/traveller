@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.amateur.traveller.servlet.ServletUtil;
 import com.amateur.traveller.session.Profile;
 
 @Component
@@ -27,7 +28,7 @@ public class UserAuthorizationInteceptor extends HandlerInterceptorAdapter {
 		logger.debug("Intercepted request: " + request.getRequestURI());
 		if (getIngorePaths() != null) {
 			for (String path : getIngorePaths()) {
-				if (StringUtils.endsWith(request.getRequestURI(), path)) {
+				if (StringUtils.startsWith(ServletUtil.getRequestURIWithoutContext(request), path)) {
 					return true;
 				}
 			}
@@ -36,15 +37,15 @@ public class UserAuthorizationInteceptor extends HandlerInterceptorAdapter {
 		HttpSession session = request.getSession();
 		Profile profile = (Profile) session.getAttribute("profile");
 		if (profile.getStatus() == Profile.ANONYMOUS) {
-			if (request.getContextPath().length() <= 1) {
-				response.sendRedirect(getAccountAccessDenyURL());
-			} else {
-				response.sendRedirect(request.getContextPath()
-						+ getAccountAccessDenyURL());
-				Map<String,Object> tempRedirectAttributes =  new HashMap<String,Object>();
-				tempRedirectAttributes.put("message", "accesscontrol.login");
-				session.setAttribute(ProfileInitializerInterceptor.REDIRECT_ATTRIBUTES_KEY, tempRedirectAttributes);
-			}
+			response.sendRedirect(ServletUtil.appendContextPath(request,
+					getAccountAccessDenyURL())
+					+ ServletUtil.getRequestFileExtension(request));
+			Map<String, Object> tempRedirectAttributes = new HashMap<String, Object>();
+			tempRedirectAttributes.put("message", "accesscontrol.login");
+			session.setAttribute(
+					ProfileInitializerInterceptor.REDIRECT_ATTRIBUTES_KEY,
+					tempRedirectAttributes);
+
 			return false;
 		}
 

@@ -38,42 +38,43 @@
 			<!-- <mvc:mapping path="/account/**"/> -->
 			<mvc:mapping path="/travelgroup/newtrip*"/>
 			<bean class="com.amateur.traveller.interceptor.UserAuthorizationInteceptor">
-				<property name="accountAccessDenyURL" value="/account/login.html"/>
+				<property name="accountAccessDenyURL" value="/account/login"/>
 				<property name="ingorePaths">
 					<array>
-						<value>/account/login.html</value>
-						<value>/account/signon.html</value>
+						<value>/account/login</value>
+						<value>/account/signon</value>
 					</array>
 				</property>
 			</bean>
 		</mvc:interceptor>
-	</mvc:interceptors>    
-	
-	 
-	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
-		  <property name="order" value="1" />
-		  <property name="mediaTypes">
+	</mvc:interceptors>
+
+
+	<bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="mediaTypes">
 			<map>
-			   <entry key="json" value="application/json" />
-			   <entry key="html" value="application/html" />
-			   <entry key="jsp" value="application/html" />
+				<entry key="json" value="application/json" />
+				<entry key="html" value="text/html" />
+				<entry key="jsp" value="text/html" />
 			</map>
-		  </property>
-		  <property name="defaultViews">
+		</property>
+		<property name="defaultViews">
 			<list>
-			  <bean	class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"/>
+				<bean
+					class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
 			</list>
-		  </property>
-	</bean>    
-	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="order" value="2" />
+		</property>
+	</bean>
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
 			<value>/WEB-INF/jsp/</value>
 		</property>
 		<property name="suffix">
 			<value>.jsp</value>
 		</property>
-	</bean>
+	</bean>	  
 	<mvc:view-controller path="/index.html" view-name="index"/>
 	<mvc:view-controller path="/" view-name="index"/>
 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
